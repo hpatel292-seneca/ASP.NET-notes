@@ -1,4 +1,84 @@
 # ASP.NET-notes
+Here are notes based on the key topics from **Lecture 2.1 - Persisting Data** for your revision:
+
+---
+
+### **Persisting Data (Week 2 Topics)**
+
+1. **Textbook Usage**: The course emphasizes using view model classes over directly interacting with persistent storage (database) through controllers, unlike the textbook examples.
+
+2. **Project Template**: You will use a pre-configured database in upcoming weeks to build interactive web apps. Later, you'll learn to create your own data store.
+
+3. **System Design and Architecture**: The course follows a layered architecture:
+   - **Views** interact with **controllers**.
+   - **Controllers** use **view model classes** for data exchange.
+   - **Manager class** handles business logic and data service operations.
+   - **Data store** (local database) is accessed indirectly using Entity Framework (EF).
+
+---
+
+### **Persistent Data Storage**
+
+1. **App Data**: Relational databases are used, stored in the `App_Data` folder. The connection is managed via the `Web.config` file using a connection string.
+
+2. **Local vs. Host-Based Databases**: 
+   - During development, a local instance of SQL Server (within Visual Studio) is used.
+   - When deploying, a host-based SQL Server can be configured.
+
+---
+
+### **Entity Framework (EF)**
+
+1. **Object-Relational Mapper (ORM)**:
+   - **Entity Framework** is used to map C# objects to database tables, simplifying database interactions.
+   - The **Data Context** serves as the gateway to the data store and supports common operations (querying, adding, updating, deleting).
+
+2. **Design Model Classes**:
+   - These classes represent the entities in the database (e.g., tables), where each property maps to a column in the table.
+
+---
+
+### **Manager Class**
+
+1. **Role**: 
+   - The **Manager class** centralizes app and business logic. Controllers never directly interact with the database; they call Manager methods.
+   - Methods in the Manager class can handle tasks like fetching data, adding records, etc.
+
+2. **Layered Architecture**: 
+   - Manager classes promote a safer and more structured coding style by isolating database operations from controllers and views.
+   - Data passed between Manager methods and controllers is handled by **view model classes**.
+
+---
+
+### **View Model Classes**
+
+1. **Purpose**:
+   - View models are tailored for specific use cases and simplify interactions between the UI and the underlying data model.
+   - They are customized to fit exactly what is needed for display, form population, or form submission.
+
+2. **Advantages**:
+   - Increased flexibility in how data is presented and processed.
+   - Enhances security by preventing direct interaction between user data and the data model.
+
+3. **Typical Use Cases**:
+   - **Add**: To create new entities.
+   - **Base**: For retrieving and displaying data.
+   - **Edit**: To update existing records.
+
+---
+
+### **AutoMapper**
+
+1. **Role**: 
+   - AutoMapper helps map between **design model classes** (data from the database) and **view model classes**.
+   - It works based on conventions, mapping properties with matching names and types automatically.
+
+2. **Usage**:
+   - In this course, you are required to use the **instance-based API** of AutoMapper, as using the static API will result in grading penalties.
+
+---
+
+
 
 ### **Domain Models:**
 - **Definition:** Domain models represent the core entities or objects in your application's business logic. These models directly map to the concepts or things in the problem domain (the real world or the business you are working with).
