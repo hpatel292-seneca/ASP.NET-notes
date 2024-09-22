@@ -213,3 +213,86 @@ Here’s how AutoMapper fits into the flow:
 - **AutoMapper** automatically maps domain models to view models and vice versa, saving you from writing repetitive code and ensuring that only the required data is sent to the front end.
 
 In short, AutoMapper helps you **extract only the needed data** from your domain model and pass it to the view in a clean and efficient way.
+
+## Customer Index View
+This `Customer/Index.cshtml` code is the Razor view for displaying a list of customers in a table format. Here’s a breakdown of the key components:
+
+### **Model Declaration**
+
+```csharp
+@model IEnumerable<MyFirstWebApp.Models.CustomerBaseViewModel>
+```
+- This line declares the type of the model the view will work with. In this case, the view expects a collection of `CustomerBaseViewModel` objects (which is likely passed from the controller).
+
+### **HTML and Razor Syntax**
+
+```csharp
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+```
+- Displays an "Index" header.
+- The `@Html.ActionLink("Create New", "Create")` generates a hyperlink that points to the `Create` action method in the controller. It allows users to navigate to a page for creating a new customer.
+
+### **Table Setup**
+
+```csharp
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <!-- More columns here -->
+    </tr>
+```
+- A table is used to display customer information.
+- `@Html.DisplayNameFor(...)` renders the display name for each property (like `FirstName`, `LastName`, etc.), based on what is defined in the `CustomerBaseViewModel` class.
+
+### **Rendering Customer Data**
+
+```csharp
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <!-- More columns here -->
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CustomerId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CustomerId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CustomerId })
+        </td>
+    </tr>
+}
+```
+- `@foreach (var item in Model)` iterates over the collection of customers (`Model`) passed to the view.
+- Inside the loop, each customer (`item`) is displayed row by row.
+- `@Html.DisplayFor(...)` renders the value of each property for the current customer (`item`), like `FirstName`, `LastName`, etc.
+  
+### **Action Links**
+```csharp
+@Html.ActionLink("Edit", "Edit", new { id=item.CustomerId }) |
+@Html.ActionLink("Details", "Details", new { id=item.CustomerId }) |
+@Html.ActionLink("Delete", "Delete", new { id=item.CustomerId })
+```
+- These are links that let the user interact with each customer:
+    - **Edit**: Takes the user to the `Edit` action method for the specific customer, identified by `CustomerId`.
+    - **Details**: Takes the user to the `Details` action method to view details for that customer.
+    - **Delete**: Takes the user to the `Delete` action method to delete the customer.
+
+Each of these action links passes the `CustomerId` as a route parameter to the corresponding action method in the controller.
+
+### **Summary**
+- This Razor view:
+  - Displays a table with customer information.
+  - Uses `Html.DisplayNameFor` to display the column names.
+  - Uses `Html.DisplayFor` to show the values for each customer in the list.
+  - Provides "Edit", "Details", and "Delete" actions for each customer.
+
+Let me know if you'd like any further clarification!
