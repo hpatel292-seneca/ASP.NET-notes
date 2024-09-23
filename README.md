@@ -438,3 +438,33 @@ public class ProductService
 - **DbSet**: Represents a collection (table) of a specific entity type (e.g., `Product`) and provides methods to query, add, update, and delete records from the database.
 
 This basic setup shows how to work with `DbContext` and `DbSet` to perform database operations in an ASP.NET project.
+
+
+In the provided code:
+
+```csharp
+ds.Entry(obj).CurrentValues.SetValues(customer);
+```
+
+Here’s a breakdown of how it works:
+
+1. **`ds.Entry(obj)`**:  
+   - The `ds` is likely your **Entity Framework DbContext** (data context).
+   - The `Entry(obj)` method retrieves the **EntityEntry** for the given object `obj`. This entry provides access to metadata and state information about the entity `obj` in the context. It allows you to work with that entity, which exists in the context’s in-memory representation.
+
+2. **`CurrentValues`**:  
+   - After retrieving the entity `obj`, you access its `CurrentValues`.  
+   - `CurrentValues` is a property of the **EntityEntry** and represents the current values of the entity's properties as a **collection of DbPropertyValues**. These values reflect the current state of the entity within the context.
+
+3. **`SetValues(customer)`**:  
+   - This method sets or updates the current values of the entity (`obj`) with the values from the provided `customer` object.
+   - It maps matching properties by name between `obj` and `customer`. If a property in `customer` matches a property in `obj`, the value from `customer` will overwrite the value in `obj`.
+   - It ignores navigation properties (i.e., relationships) and only updates scalar properties (like strings, integers, etc.).
+   - Any properties in `customer` that don’t exist in `obj` are ignored.
+
+### Usage:
+- This pattern is helpful when you want to **update an entity’s properties** without manually assigning each property one by one.
+- It’s particularly useful in scenarios like **editing an existing record** in a database using Entity Framework, where you load an entity (e.g., `obj`), then apply changes from a model or another object (e.g., `customer`), and finally save those changes back to the database.
+
+### Summary:
+`SetValues(customer)` provides an efficient way to update an entity in the database by copying matching property values from another object (in this case, `customer`), while ignoring properties that don’t exist or navigation properties that represent relationships.
