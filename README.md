@@ -468,3 +468,22 @@ Here’s a breakdown of how it works:
 
 ### Summary:
 `SetValues(customer)` provides an efficient way to update an entity in the database by copying matching property values from another object (in this case, `customer`), while ignoring properties that don’t exist or navigation properties that represent relationships.
+
+
+Data annotation in ASP.NET is a way to apply validation rules, display formatting, and model behavior by using attributes directly in the model classes. These attributes help ensure that the data meets certain requirements before being processed or saved to a database. They are part of the `System.ComponentModel.DataAnnotations` namespace.
+
+### Common Data Annotation Attributes:
+1. **[Required]**: Ensures the property must have a value.
+2. **[StringLength]**: Specifies the maximum and/or minimum length of a string.
+3. **[Range]**: Restricts a value to a specific numeric range.
+4. **[RegularExpression]**: Validates the property against a specific regular expression pattern.
+5. **[EmailAddress]**: Validates that the property contains a valid email address.
+6. **[DisplayName]**: Sets a custom display name for a property in UI.
+7. **[Compare]**: Compares two properties to ensure they have the same value.
+
+### Benefits of Data Annotations:
+1. **Simplifies Validation**: You can define validation rules directly in the model, ensuring that validation is centralized and consistent.
+2. **Improves Code Readability**: Attributes provide an easy-to-read, declarative way to enforce business rules and data integrity.
+3. **Reduces Boilerplate Code**: Eliminates the need for repetitive validation logic in the controller or service layer.
+4. **Integrates with Client-Side Validation**: When used with frameworks like ASP.NET MVC, it can automatically apply validation rules to the client side.
+5. **Easy Error Handling**: Validation attributes automatically generate user-friendly error messages when rules are violated.
