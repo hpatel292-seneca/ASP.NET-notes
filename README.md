@@ -682,3 +682,194 @@ In a .NET Core MVC web app using Entity Framework (EF), associated data typicall
 
 This is a basic overview of how associated data works in a .NET Core MVC app with EF Core.
 While **Query Syntax** is often easier to read for complex queries (especially for SQL-like operations), **Fluent Syntax** is more flexible, supports method chaining, and is the only way to express some operations (like `Skip`, `Take`, or certain joins). Both syntaxes are interchangeable, and they often produce the same underlying query.
+
+---
+### Simplified Notes on Associated Data in ASP.NET
+
+#### Filtering and Associated Objects
+- When fetching a **Program** object that has associated data (like **Subject**), it doesn't include related objects by default.
+- To include associated data, you need to explicitly use **eager loading** by calling the `Include()` method.
+
+#### Example of Filtering and Including Associated Objects
+- First, include the associated **Subject** data using `Include()`:
+  ```csharp
+  var progs = ds.Programs.Include("Subjects");
+  ```
+- Then, add filtering to only include **Program** objects where `Credential` is "Degree":
+  ```csharp
+  var progs = ds.Programs.Include("Subjects").Where(p => p.Credential == "Degree");
+  ```
+
+#### Filtering and Sorting with Associated Objects
+- You can chain `Include()`, `Where()`, and `OrderBy()` to filter and sort the data:
+  ```csharp
+  var progs = ds.Programs
+      .Include("Subjects")
+      .Where(p => p.Credential == "Degree")
+      .OrderBy(p => p.Code);
+  ```
+- This retrieves **Program** objects with the "Degree" credential, includes their associated **Subject** objects, and sorts them by **Code**.
+
+#### Suggested Query Strategies for Web Apps
+- **Get all**: Avoid using `Include()` in "get all" queries because it can result in fetching too much data. If necessary, limit the data using `Take()`.
+- **Get one**: It’s common to use `Include()` in "get one" queries because the included data often adds value.
+
+#### Lazy Loading vs Eager Loading
+- **Lazy Loading**: Fetches associated data only when accessed later. No `Include()` is needed.
+- **Eager Loading**: Fetches the object and its associated data all at once using `Include()`.
+
+#### Avoid Lazy Loading in Web Apps
+- **Lazy Loading** is not recommended for web apps because web apps use the HTTP protocol, where each request-response cycle is stateless.
+- Always use **Eager Loading** (`Include()`) in web apps to ensure all necessary data is fetched at once. 
+
+Lazy loading is ineffective in web apps and can cause issues, so it's best to disable it.
+
+#### Previously Covered
+- **Scaffolding a view**: Generates views for common actions like list, create, edit, etc.
+- **HTML Helpers**: Help render HTML elements easily in Razor views.
+- **Associated entities**: Displaying related entities in views.
+
+---
+
+### Item Selection and Bootstrap Overview
+- **Item-selection elements** are necessary when dealing with associated entities (e.g., dropdowns, checkboxes).
+- We will also explore **Bootstrap** for styling and responsive design in ASP.NET MVC.
+
+---
+
+### Display-only Views
+- Scaffolding works well for display-only views, rendering objects in tables or description lists.
+- When dealing with associated entities, scaffolding does **not** render related objects; you need to use item-selection controls like dropdowns or checkboxes.
+
+---
+
+### Data Modification Views
+- Scaffolding can generate input fields for adding, editing, and deleting data but does not handle item-selection elements like dropdowns or checkboxes.
+  
+#### Scaffolded HTML Form Elements:
+| HTML Form Element     | Scaffolded? |
+|-----------------------|-------------|
+| Label                 | Yes         |
+| Text box              | Yes         |
+| Multiline text area    | Yes         |
+| Button                | Yes         |
+| Hidden field          | Yes         |
+| Dropdown list         | No          |
+| Listbox               | No          |
+| Radio button group    | No          |
+| Checkbox group        | No          |
+
+---
+
+### Item-selection Elements in HTML Forms
+- **Dropdown list**: 
+  ```html
+  <select>
+    <option>Option 1</option>
+    <option>Option 2</option>
+  </select>
+  ```
+- **Listbox (Single/Multiple Selection)**: Allows multiple selections with the `multiple` attribute:
+  ```html
+  <select size="4" multiple>
+    <option>Option 1</option>
+    <option>Option 2</option>
+  </select>
+  ```
+- **Radio buttons** and **Checkbox groups**: Allow for single or multiple selections:
+  ```html
+  <input type="radio" name="option" />
+  <input type="checkbox" name="option" />
+  ```
+
+---
+
+### Hand-editing Item-selection Elements
+- Since scaffolding doesn’t generate item-selection elements, you’ll need to hand-code these elements into your views.
+- **Strategy**:
+  1. Use scaffolding to generate base views.
+  2. Edit the view code to add item-selection elements manually.
+
+---
+
+### Passing Data to Item-selection Elements
+- **Best practice**: Create a view model that includes properties for the data required in item-selection elements.
+- **View Models**: Separate models for “add” and “edit” scenarios are recommended.
+  - Example: `VenueEditFormViewModel` and `VenueEditViewModel` for form input and submission data.
+
+---
+
+### Submitting Item-selection Data
+- For single-selection: The `name` attribute in HTML must match a property in the view model (usually an int or string).
+- For multiple-selection: The property in the view model should be a collection (e.g., `List<int>` or `IEnumerable<int>`).
+
+---
+
+### Introduction to Bootstrap
+- **Bootstrap** is a popular framework for responsive and mobile-friendly web apps. It comes pre-installed with ASP.NET MVC.
+- **Bootstrap 3.x** is included by default, but the latest version is 5.x (don’t update it for course assignments due to compatibility).
+
+---
+
+### How to Use Bootstrap
+- Bootstrap is primarily CSS-based. You use it by adding class names to HTML elements:
+  - **Grid system** for layout.
+  - **Forms** for styling input elements.
+  - **Tables** for displaying data.
+  - **Buttons** for actions.
+
+#### Responsive Grid System
+- Bootstrap uses a **12-column grid system** to create layouts that automatically adjust for different screen sizes.
+
+#### Example of Grid Classes:
+- `.col-xs-*`: Extra small devices.
+- `.col-sm-*`: Small devices.
+- `.col-md-*`: Medium devices.
+- `.col-lg-*`: Large devices.
+
+---
+
+### Bootstrap and HTML Forms
+- Wrap form controls in `.form-group` and use `.form-control` to get consistent, well-spaced, and styled forms.
+- Always pair `<label>` elements with form controls to ensure accessibility and proper alignment.
+
+---
+
+### SelectList Introduction
+- **SelectList** is a class that helps package data for use in item-selection elements (e.g., dropdown lists).
+- Best practice: Add "List" as a suffix for SelectList properties in the view model (e.g., `ManufacturerList`).
+
+#### Example:
+```csharp
+public SelectList ManufacturerList { get; set; }
+```
+
+#### SelectList Constructor:
+1. **IEnumerable items**: The collection of items (e.g., Products, Employees).
+2. **dataValueField**: The property used for the "value" attribute (e.g., `Id`).
+3. **dataTextField**: The property used for the visible text (e.g., `Name`).
+
+---
+
+### Using HTML Helpers
+- **HTML Helpers** make writing HTML simpler and integrate well with model binding.
+- Common HTML Helpers for item-selection elements:
+  - `@Html.DropDownList()`
+  - `@Html.ListBox()`
+
+#### Example:
+```csharp
+@Html.DropDownList("ManufacturerId", Model.ManufacturerList, new { @class = "form-control" })
+```
+
+- Use these helpers for generating dropdowns and listboxes, but you’ll need to hand-code radio button and checkbox groups.
+
+---
+
+### Conclusion
+- Bootstrap helps make your web apps responsive and visually consistent.
+- Item-selection elements (dropdowns, checkboxes) require hand-coding and integrating data through view models.
+- SelectList is crucial for creating dynamic item-selection elements.
+- **HTML Helpers** simplify form creation and help maintain a strong connection between the view and model data.
+
+By following these practices, you can efficiently manage item-selection elements and improve the user experience with Bootstrap.
