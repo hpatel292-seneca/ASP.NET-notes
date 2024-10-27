@@ -873,3 +873,45 @@ public SelectList ManufacturerList { get; set; }
 - **HTML Helpers** simplify form creation and help maintain a strong connection between the view and model data.
 
 By following these practices, you can efficiently manage item-selection elements and improve the user experience with Bootstrap.
+
+---
+
+### Handling the "POST" Method
+- The **POST** method is used to handle form data submitted by the user.
+- It works similarly to other **"add new"** use cases.
+- The difference here is that the **PRG** (Post-Redirect-Get) pattern is used, where after adding a new item, the user is redirected to the **Details** view in the `VehiclesController`.
+  
+---
+
+### Introduction to Attribute Routing
+- In traditional routing, URLs might look like this:  
+  `https://host.example.com/manufacturers/addvehicle/56`
+  - This URL structure suggests that you’re adding a vehicle with an ID of **56**, but the context might not be clear.
+
+- With **Attribute Routing**, you can make the URL more intuitive, such as:  
+  `https://host.example.com/manufacturers/56/addvehicle`  
+  - This URL clearly indicates adding a vehicle to manufacturer **56**.
+
+---
+
+### Creating Routes Using Attributes
+- **Attribute Routing** allows you to directly define routes in your controller actions.
+- For example, in `ManufacturersController`, you can specify the following route for adding a vehicle:
+  ```csharp
+  [Route("manufacturers/{id}/addvehicle")]
+  public ActionResult AddVehicle(int? id)
+  ```
+
+---
+
+### Enabling Attribute Routing
+- To use **Attribute Routing**, you need to enable it in your ASP.NET MVC app.
+- This is done by adding the following line to the `RegisterRoutes` method in `RouteConfig`:
+  ```csharp
+  routes.MapMvcAttributeRoutes();
+  ```
+- **Attribute Routing** can work alongside the conventional routing methods and provides more flexibility in defining custom resource URLs.
+
+---
+
+By using attribute routing, you can create more readable and meaningful URLs that clearly reflect the resource being accessed or the operation being performed, making your web app's navigation more intuitive.
